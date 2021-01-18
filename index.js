@@ -1,5 +1,20 @@
 /* == Control handlers == */
 
+// Get canvas
+let canvas = document.getElementById("myCanvas");
+
+// Resolution
+let res = document.querySelector("#resolution");
+res.output = res.querySelector(".output");
+res.control = res.querySelector(".control");
+res.sendButton =  res.querySelector(".send");
+res.sendButton.onclick = function() {
+	res.output.innerHTML = res.control.value + "x" + res.control.value;
+	canvas.height = res.control.value;
+	canvas.width = res.control.value;
+	render();
+}
+
 // Iterations
 let itt = document.querySelector("#iterations");
 itt.output = itt.querySelector(".output");
@@ -11,8 +26,7 @@ itt.control.oninput = function() {
 
 /* == Rendering == */
 
-// Get canvas and context
-let canvas = document.getElementById("myCanvas");
+// Get contex
 let gl = canvas.getContext("webgl");
 
 if (!gl) {
@@ -47,8 +61,6 @@ async function setup() {
 
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-	// Set up render
-	gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
 	window.program = program;
 
@@ -58,6 +70,15 @@ async function setup() {
 function render() {
 	// Get controls
 	let itts = itt.control.value;
+
+	// TODO: Customizable palettes
+	let palette = [
+		0.5, 0.5, 0.5, 1,
+		0.8, 0.8, 0.8, 1,
+	]
+	
+	// Set up viewport
+	gl.viewport(0, 0, canvas.width, canvas.height);
 
 	// Clear canvas
 	gl.clearColor(0, 0, 0, 0);
@@ -70,10 +91,6 @@ function render() {
 	gl.uniform2f(program.u_resolution, canvas.width, canvas.height);
 	gl.uniform1i(program.u_iterations, itts);
 	
-	let palette = [
-		0.5, 0.5, 0.5, 1,
-		0.8, 0.8, 0.8, 1,
-	]
 	
 	gl.uniform4fv(program.u_palette, palette);
 
