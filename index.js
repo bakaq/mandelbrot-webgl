@@ -3,6 +3,8 @@
 // Get canvas
 let canvas = document.getElementById("myCanvas");
 
+let renderTime = document.getElementById("render-time");
+
 // Resolution
 let res = document.querySelector("#resolution");
 res.output = res.querySelector(".output");
@@ -94,8 +96,8 @@ async function setup() {
 }
 
 function render() {
-	console.log("Render");
-	
+	let t1 = new Date();
+
 	// Get controls
 	let center = [cent.real.value, cent.imag.value];
 	let zoomm = Math.pow(1.2, zoom.control.value - 6);
@@ -143,6 +145,12 @@ function render() {
 	let count = 2 * 3;
 
 	gl.drawArrays(primitiveType, offset, count);
+
+	let t2 = new Date();
+
+	let dt = t2.getTime() - t1.getTime();
+
+	renderTime.innerHTML = "Last frame rendered in " + dt + "ms";
 }
 
 setup();

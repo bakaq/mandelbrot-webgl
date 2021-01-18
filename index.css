@@ -48,6 +48,7 @@ body {
 }
 
 .controlers {
+	position: relative;
 	flex: 1 1 auto;
 	box-sizing: border-box;
 	border: 1px;
@@ -62,6 +63,18 @@ body {
 	border-bottom: 1px;
 	border-bottom-style: solid;
 	padding-bottom: 10px;
+}
+
+div.controler:nth-last-child(2) {
+	border-bottom: none;
+	border-bottom-style: none;
+	padding-bottom: 0;
+}
+
+#render-time {
+	position: absolute;
+	bottom: var(--border-radius);
+	right: var(--border-radius);
 }
 
 .control, .send {
@@ -104,5 +117,9 @@ input.control[type="range"] {
 	
 	.control, .send {
 		font-size: 0.6em;	
+	}
+
+	#render-time {
+		font-size: 0.6em;
 	}
 }
