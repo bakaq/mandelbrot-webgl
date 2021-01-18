@@ -1,10 +1,15 @@
-// Get slider
-let output = document.getElementById("sliderValue");
-let slider = document.getElementById("slider");
-slider.oninput = function() {
-	output.innerHTML = this.value;
-	render(this.value);
+/* == Control handlers == */
+
+// Iterations
+let itt = document.querySelector("#iterations");
+itt.output = itt.querySelector(".output");
+itt.control = itt.querySelector(".control");
+itt.control.oninput = function() {
+	itt.output.innerHTML = this.value;
+	render();
 }
+
+/* == Rendering == */
 
 // Get canvas and context
 let canvas = document.getElementById("myCanvas");
@@ -47,10 +52,13 @@ async function setup() {
 
 	window.program = program;
 
-	render(10);
+	render();
 }
 
-function render(itts) {
+function render() {
+	// Get controls
+	let itts = itt.control.value;
+
 	// Clear canvas
 	gl.clearColor(0, 0, 0, 0);
 	gl.clear(gl.COLOR_BUFFER_BIT);
