@@ -13,7 +13,7 @@ body, html {
 body {
 	box-sizing: border-box;
 	background-color: #CCC;
-	font-size: 40px;
+	font-size: 50px;
 	padding: 10px;
 }
 
@@ -55,11 +55,21 @@ body {
 	border-style: solid;
 	border-radius: var(--border-radius);
 	padding: 10px;
+	overflow: auto;
+}
+
+.controler {
+	border-bottom: 1px;
+	border-bottom-style: solid;
+	padding-bottom: 10px;
+}
+
+.control, .send {
+	font-size: 0.9em;	
 }
 
 input.control[type="number"] {
-	width: 100px;
-	font-size: 16px;
+	width: 4em;
 }
 
 input.control[type="range"] {
@@ -74,7 +84,7 @@ input.control[type="range"] {
 /* Computer (landscape) */
 @media screen and (orientation: landscape) {
 	html, body {
-		font-size: 30px;
+		font-size: 40px;
 	}
 
 	#myCanvas {
@@ -90,5 +100,9 @@ input.control[type="range"] {
 
 	.container {
 		flex-flow: row;
+	}
+	
+	.control, .send {
+		font-size: 0.6em;	
 	}
 }
