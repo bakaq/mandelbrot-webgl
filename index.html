@@ -9,18 +9,32 @@
 			<canvas id="myCanvas" width="600" height="600"></canvas>
 			
 			<div class="controlers">
+
+				<div id="resolution" class="controler">
+					Resolution: <span class="output">600x600</span> <br>
+					<input class="control" type="number" value="600">
+					<button class="send">Update Resolution</button>
+				</div>
 				
 				<div id="iterations" class="controler">
 					Iterations: <span class="output">10</span> <br>
 					<input class="control" type="range" min="0" max="50" value="10">
 				</div>
 				
-				<div id="resolution" class="controler">
-					Resolution: <span class="output">600x600</span> <br>
-					<input class="control" type="number" value="600">
-					<button class="send">Update Resolution</button>
+				<div id="center" class="controler">
+					Center: <span class="output">-0.5 + 0i</span> <br>
+					<input class="control real" type="number" value="-0.5">
+					+
+					<input class="control imag" type="number" value="0"> i 
+					<button class="send">Update Center</button>
 				</div>
-			
+				
+				<div id="zoom" class="controler">
+					Zoom: <span class="output">0</span> <br>
+					<input class="control" type="range" min="0" max="100" value="0" step="0.1">
+				</div>
+
+				<div id="render-time"></div>
 			</div>
 		</div>
 	

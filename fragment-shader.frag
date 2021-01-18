@@ -1,5 +1,7 @@
 precision highp float;
 
+uniform vec2 u_center;
+uniform float u_zoom;
 uniform vec2 u_resolution;
 uniform int u_iterations;
 uniform vec4 u_palette[2];
@@ -29,12 +31,15 @@ vec4 mandelbrot(vec2 c) {
 }
 
 vec4 pixel(vec2 coords) {
+	// Disabled sampling for now
+	/*
 	ivec2 samples = ivec2(4, 4);
 	vec4 color = vec4(0);
 
 	vec2 pixel_size = vec2(1.0, 1.0)/u_resolution;
 	vec2 d = pixel_size/vec2(samples);
 
+	
 	for (int i = 0; i < 100; ++i) {
 		if (i >= samples[0]) {
 			break;
@@ -48,11 +53,14 @@ vec4 pixel(vec2 coords) {
 	}
 	
 	color = color/float(samples[0] * samples[1]);
-
-	return color;
+	*/
+	
+	return mandelbrot(coords);
 }
 
 void main() {
-	vec2 coords = (gl_FragCoord.xy/u_resolution)*3.0 - vec2(2.0, 1.5);
+	vec2 coords = (gl_FragCoord.xy/u_resolution)
+				/u_zoom
+				+ u_center - 0.5/u_zoom;
 	gl_FragColor = pixel(coords); 
 }

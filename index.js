@@ -20,9 +20,32 @@ let itt = document.querySelector("#iterations");
 itt.output = itt.querySelector(".output");
 itt.control = itt.querySelector(".control");
 itt.control.oninput = function() {
-	itt.output.innerHTML = this.value;
+	itt.output.innerHTML = itt.control.value;
 	render();
 }
+
+// Center
+let cent = document.querySelector("#center");
+cent.output = cent.querySelector(".output");
+cent.real = cent.querySelector(".control.real");
+cent.imag = cent.querySelector(".control.imag");
+cent.sendButton = cent.querySelector(".send");
+cent.sendButton.onclick = function() {
+	let sign = cent.imag.value >= 0 ? "+" : "-";
+	
+	cent.output.innerHTML = cent.real.value + " " + sign + " " + Math.abs(cent.imag.value) + "i";
+	render();
+}
+
+// Zoom
+let zoom = document.querySelector("#zoom");
+zoom.output = zoom.querySelector(".output");
+zoom.control = zoom.querySelector(".control");
+zoom.control.oninput = function () {
+	zoom.output.innerHTML = zoom.control.value;
+	render();
+}
+
 
 /* == Rendering == */
 
@@ -42,6 +65,9 @@ async function setup() {
 
 	// Attributes and uniforms
 	program.a_position = gl.getAttribLocation(program, "a_position");
+
+	program.u_center = gl.getUniformLocation(program, "u_center");
+	program.u_zoom = gl.getUniformLocation(program, "u_zoom");
 	program.u_resolution = gl.getUniformLocation(program, "u_resolution");
 	program.u_iterations = gl.getUniformLocation(program, "u_iterations");
 	program.u_palette = gl.getUniformLocation(program, "u_palette");
@@ -68,7 +94,11 @@ async function setup() {
 }
 
 function render() {
+	console.log("Render");
+	
 	// Get controls
+	let center = [cent.real.value, cent.imag.value];
+	let zoomm = Math.pow(1.2, zoom.control.value - 6);
 	let itts = itt.control.value;
 
 	// TODO: Customizable palettes
@@ -88,10 +118,10 @@ function render() {
 	gl.useProgram(program);
 
 	// Set uniforms
+	gl.uniform2fv(program.u_center, center);
+	gl.uniform1f(program.u_zoom, zoomm);
 	gl.uniform2f(program.u_resolution, canvas.width, canvas.height);
 	gl.uniform1i(program.u_iterations, itts);
-	
-	
 	gl.uniform4fv(program.u_palette, palette);
 
 	// Set attributes
