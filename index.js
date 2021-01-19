@@ -14,7 +14,11 @@ res.sendButton.onclick = function() {
 	res.output.innerHTML = res.control.value + "x" + res.control.value;
 	canvas.height = res.control.value;
 	canvas.width = res.control.value;
-	render();
+	if (!rendering){
+		render();
+	} else {
+		needsLastPass = true;
+	}
 }
 
 // Iterations
@@ -23,7 +27,11 @@ itt.output = itt.querySelector(".output");
 itt.control = itt.querySelector(".control");
 itt.control.oninput = function() {
 	itt.output.innerHTML = itt.control.value;
-	render();
+	if (!rendering){
+		render();
+	} else {
+		needsLastPass = true;
+	}
 }
 
 // Center
@@ -36,7 +44,11 @@ cent.sendButton.onclick = function() {
 	let sign = cent.imag.value >= 0 ? "+" : "-";
 	
 	cent.output.innerHTML = cent.real.value + " " + sign + " " + Math.abs(cent.imag.value) + "i";
-	render();
+	if (!rendering){
+		render();
+	} else {
+		needsLastPass = true;
+	}
 }
 
 // Zoom
@@ -45,11 +57,19 @@ zoom.output = zoom.querySelector(".output");
 zoom.control = zoom.querySelector(".control");
 zoom.control.oninput = function () {
 	zoom.output.innerHTML = zoom.control.value;
-	render();
+	if (!rendering){
+		render();
+	} else {
+		needsLastPass = true;
+	}
 }
 
 
 /* == Rendering == */
+
+let rendering = false;
+let needsLastPass = false;
+
 
 // Get contex
 let gl = canvas.getContext("webgl");
@@ -95,7 +115,11 @@ async function setup() {
 	render();
 }
 
-function render() {
+
+
+function render(lastPass = false) {
+	window.rendering = true;
+
 	let t1 = new Date();
 
 	// Get controls
@@ -146,11 +170,22 @@ function render() {
 
 	gl.drawArrays(primitiveType, offset, count);
 
+	// So that the benchmark works
+	
+	let pixels = new Uint8Array(gl.drawingBufferWidth * gl.drawingBufferHeight * 4);
+	gl.readPixels(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+
 	let t2 = new Date();
 
 	let dt = t2.getTime() - t1.getTime();
 
 	renderTime.innerHTML = "Last frame rendered in " + dt + "ms";
+	window.rendering = false;
+
+	if (needsLastPass) {
+		window.needsLastPass = false;
+		render(lastPass = true);
+	}
 }
 
 setup();
