@@ -1,9 +1,10 @@
-/* == Control handlers == */
 
 // Get canvas
 let canvas = document.getElementById("myCanvas");
 
 let renderTime = document.getElementById("render-time");
+
+/* == Control handlers == */
 
 // Resolution
 let res = document.querySelector("#resolution");
@@ -20,6 +21,13 @@ res.sendButton.onclick = function() {
 		needsLastPass = true;
 	}
 }
+
+// Initial resolution
+let initRes = Math.min(canvas.clientHeight, canvas.clientWidth);
+canvas.width = initRes;
+canvas.height = initRes;
+res.control.value = initRes;
+res.output.innerHTML = initRes + "x" + initRes;
 
 // Iterations
 let itt = document.querySelector("#iterations");
