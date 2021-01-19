@@ -45,6 +45,8 @@ body {
 	object-fit: contain;
 
 	margin-bottom: 15px;
+	
+	touch-action: none;
 }
 
 .controlers {
