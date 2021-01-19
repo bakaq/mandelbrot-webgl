@@ -1,4 +1,3 @@
-
 // Get canvas
 let canvas = document.getElementById("myCanvas");
 
@@ -28,6 +27,7 @@ canvas.width = initRes;
 canvas.height = initRes;
 res.control.value = initRes;
 res.output.innerHTML = initRes + "x" + initRes;
+
 
 // Iterations
 let itt = document.querySelector("#iterations");
@@ -72,6 +72,48 @@ zoom.control.oninput = function () {
 	}
 }
 
+
+// Panning
+let fix_x;
+let fix_y;
+let mouse_x;
+let mouse_y;
+let panning = false
+canvas.onpointerdown = function(e) {
+	console.log("Pointer down");
+	fix_x = e.offsetX;
+	fix_y = e.offsetY;
+	panning = true;
+}
+canvas.onpointermove = function(e) {
+	if (panning) {
+		if (e.buttons != 1) {
+			console.log("Pointer up");
+			panning = false;
+			return;
+		}
+		
+		mouse_x = e.offsetX;
+		mouse_y = e.offsetY;
+
+		let canv_dim = Math.min(canvas.clientHeight, canvas.clientWidth);
+
+		// Update center value
+		zoomm = Math.pow(1.2, zoom.control.value - 6);
+		
+		cent.real.value = Number(cent.real.value) -
+			(mouse_x - fix_x)/canv_dim/zoomm;
+		cent.imag.value = Number(cent.imag.value) +
+			(mouse_y - fix_y)/canv_dim/zoomm;
+
+		// Render and update label
+		cent.sendButton.onclick();
+
+		// New pivot
+		fix_x = mouse_x;
+		fix_y = mouse_y;
+	}
+}
 
 /* == Rendering == */
 
